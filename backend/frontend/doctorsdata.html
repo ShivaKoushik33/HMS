@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Consultation Booking</title>
+    <link rel="stylesheet" href="doctorsdata.css">
+</head>
+<body>
+    <div class="header">
+        <a href="login.html" class="main-heading" target="blank"><img src="stetoscope.jpg">Medease</a>
+   
+    <div>
+        <a href="login.html" class="logoutbtn" target="blank">LogOut</a>
+    </div>
+</div>
+    <div id="doctors-container"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                const response = await fetch('localhost:4000/doctor/');
+                const doctors = await response.json();
+
+                const container = document.getElementById('doctors-container');
+                doctors.forEach(doctor => {
+                    const doctorCard = document.createElement('div');
+                    doctorCard.classList.add('doctor-card');
+
+                    doctorCard.innerHTML = `
+                        <img src="${doctor.doctorPhoto}" alt="${doctor.name}" class="doctor-image">
+                        <div class="doctor-details">
+                            <h2>${doctor.name}</h2>
+                            <p>Specialist in ${doctor.specalist}</p>
+                            <p>Age: ${doctor.age}</p>
+                            <p>Consultation Fee: $${doctor.fee}</p>
+                            <button id="book-consultation-btn">Book Consultation</button>
+                            <button id="login-btn">Back</button>
+                        </div>
+                    `;
+
+                    container.appendChild(doctorCard);
+                });
+
+                // Add event listener for the login button
+                document.querySelectorAll('#login-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        window.location.href = 'login.html';
+                    });
+                });
+            } catch (err) {
+                console.error('Error fetching doctors:', err);
+            }
+        });
+    </script>
+</body>
+</html>
